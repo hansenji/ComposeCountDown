@@ -140,9 +140,8 @@ fun Timer(
             Text(text = "%02.2f".format(timeMs / 1000.0), style = MaterialTheme.typography.h3)
             Row {
                 Button(
-                    onClick = {
-                        onStartStop()
-                    }, modifier = Modifier
+                    onClick = { onStartStop() },
+                    modifier = Modifier
                         .padding(8.dp)
                         .clip(CircleShape),
                     enabled = timeMs != 0L
@@ -151,11 +150,12 @@ fun Timer(
                         imageVector = if (running) Icons.Filled.Pause else Icons.Filled.PlayArrow,
                         contentDescription = if (running) "Pause" else "Start",
 
-                        )
+                    )
                 }
                 AnimatedVisibility(resetButtonVisible) {
                     Button(
-                        onClick = { onReset() }, modifier = Modifier
+                        onClick = { onReset() },
+                        modifier = Modifier
                             .padding(8.dp)
                             .clip(CircleShape)
                     ) {
@@ -166,7 +166,6 @@ fun Timer(
                     }
                 }
             }
-
         }
     }
 }
