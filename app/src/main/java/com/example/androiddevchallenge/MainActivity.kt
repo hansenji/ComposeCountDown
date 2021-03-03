@@ -42,8 +42,8 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +52,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import kotlinx.coroutines.channels.ticker
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,20 +68,17 @@ const val INITIAL_TIME = 10_000L
 
 @Composable
 fun MyApp() {
-    val coroutineScope = rememberCoroutineScope()
     val countDownTime = rememberSaveable { mutableStateOf(INITIAL_TIME) }
     val run = rememberSaveable { mutableStateOf(false) }
-    if (run.value) {
-        coroutineScope.launch {
-            val ticker = ticker(5)
-            for (event in ticker) {
-                if (!run.value) return@launch
-                val value = countDownTime.value
-                if (value > 0) {
-                    countDownTime.value = value - 5L
-                } else {
-                    run.value = false
-                }
+    LaunchedEffect(run.value) {
+        val ticker = ticker(5)
+        for (event in ticker) {
+            if (!run.value) break
+            val value = countDownTime.value
+            if (value > 0) {
+                countDownTime.value = value - 5L
+            } else {
+                run.value = false
             }
         }
     }
